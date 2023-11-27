@@ -135,7 +135,7 @@ def main():
         for x in range(32):
             for y in range(8):
                 color = x * 8 + y
-                sys.stdout.write(f"\033[{color}m{color}▇▇▇▇▇  ")
+                sys.stdout.write(f"\033[{color}m{color} ▇▇▇▇▇\033[0m  ")
             print()
         sys.exit()
 
