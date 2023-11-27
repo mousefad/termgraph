@@ -21,15 +21,19 @@ VERSION = "0.5.3"
 init()
 
 # ANSI escape SGR Parameters color codes
+# changed these for Ubuntu in wsltty
 AVAILABLE_COLORS = {
-    "red": 124,
-    "blue": 27,
-    "green": 46,
-    "magenta": 164,
-    "yellow": 190,
-    "black": 8,
-    "cyan": 51,
-}
+        "red": 31,
+        "blue": 34,
+        "green": 32,
+        "magenta": 35,
+        "yellow": 33,
+        "black": 30,
+        "cyan": 36,
+        "grey": 38,
+        "white": 37,
+        "purple": 95,
+        }
 
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 UNITS = ["", "K", "M", "B", "T"]
@@ -127,7 +131,12 @@ def main():
     args = init_args()
 
     if args["version"]:
-        print("termgraph v{}".format(VERSION))
+        print("termgraph v{}".format(VERSION), os.name)
+        for x in range(32):
+            for y in range(8):
+                color = x * 8 + y
+                sys.stdout.write(f"\033[{color}m{color}▇▇▇▇▇  ")
+            print()
         sys.exit()
 
     _, labels, data, colors = read_data(args)
