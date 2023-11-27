@@ -22,13 +22,13 @@ init()
 
 # ANSI escape SGR Parameters color codes
 AVAILABLE_COLORS = {
-    "red": 91,
-    "blue": 94,
-    "green": 92,
-    "magenta": 95,
-    "yellow": 93,
-    "black": 90,
-    "cyan": 96,
+    "red": 124,
+    "blue": 27,
+    "green": 46,
+    "magenta": 164,
+    "yellow": 190,
+    "black": 8,
+    "cyan": 51,
 }
 
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
