@@ -20,19 +20,20 @@ VERSION = "0.5.3"
 
 init()
 
-# ANSI escape SGR Parameters color codes
-# changed these for Ubuntu in wsltty
+# 8 bit ANSI escape color codes, solarized
 AVAILABLE_COLORS = {
-        "red": 31,
-        "blue": 34,
-        "green": 32,
-        "magenta": 35,
-        "yellow": 33,
-        "black": 30,
-        "cyan": 36,
-        "grey": 38,
-        "white": 37,
-        "purple": 95,
+        "black": 0,
+        "red": 1,
+        "green": 2,
+        "yellow": 3,
+        "blue": 4,
+        "magenta": 5,
+        "cyan": 6,
+        "white": 7,
+        "transparant": 8,
+        "orange": 9,
+        "grey": 10,
+        "purple": 13,
         }
 
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -135,7 +136,7 @@ def main():
         for x in range(32):
             for y in range(8):
                 color = x * 8 + y
-                sys.stdout.write(f"\033[{color}m{color} ▇▇▇▇▇\033[0m  ")
+                sys.stdout.write(f"\033[38:5:{color}m{color} ▇▇▇▇▇\033[0m  ")
             print()
         sys.exit()
 
@@ -382,7 +383,7 @@ def print_row(
         sys.stdout.write(SM_TICK)
     else:
         if color:
-            sys.stdout.write(f"\033[{color}m")  # Start to write colorized.
+            sys.stdout.write(f"\033[38:5:{color}m")  # Start to write colorized.
         for _ in range(num_blocks):
             sys.stdout.write(TICK)
 
@@ -475,7 +476,7 @@ def print_vertical(vertical_rows: List, labels: List, color: bool, args: Dict) -
     """Print the whole vertical graph."""
     if color:
         sys.stdout.write(
-            "\033[{color}m".format(color=color)
+                "\033[38:5:{color}m".format(color=color)
         )  # Start to write colorized.
 
     for row in vertical_rows:
@@ -642,9 +643,9 @@ def print_categories(categories: List, colors: List) -> None:
     for i in range(len(categories)):
         if colors:
             sys.stdout.write(
-                "\033[{color_i}m".format(color_i=colors[i])
+                    "\033[38:5:{color_i}m".format(color_i=colors[i])
             )  # Start to write colorized.
-            sys.stdout.write(f"\033[{colors[i]}m")  # Start to write colorized.
+            sys.stdout.write(f"\033[38:5:{colors[i]}m")  # Start to write colorized.
 
         sys.stdout.write(TICK + " " + categories[i] + "  ")
         if colors:
@@ -794,7 +795,7 @@ def calendar_heatmap(data: Dict, labels: List, args: Dict) -> None:
                 tick = " "
 
             if colornum:
-                sys.stdout.write("\033[{colornum}m".format(colornum=colornum))
+                sys.stdout.write("\033[38:5:{colornum}m".format(colornum=colornum))
 
             sys.stdout.write(tick)
             if colornum:
