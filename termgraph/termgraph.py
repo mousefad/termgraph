@@ -359,8 +359,8 @@ def print_row(
     3: ▇▇▇▇ 4
     """
     sys.stdout.write("\033[0m")  # no color
-    if value == 0.0:
-        sys.stdout.write("\033[90m")  # dark gray
+    # if value == 0.0:
+    #     sys.stdout.write("\033[90m")  # dark gray
 
     if doprint:
         print(label, tail, " ", end="")
