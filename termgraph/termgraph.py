@@ -576,6 +576,9 @@ def chart(colors: List, data: List, args: Dict, labels: List) -> None:
 
 def check_data(labels: List, data: List, args: Dict) -> List:
     """Check that all data were inserted correctly. Return the colors."""
+    if len(data) == 0:
+        sys.exit(0);
+
     len_categories = len(data[0])
 
     # Check that there are data for all labels.
