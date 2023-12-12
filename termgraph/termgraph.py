@@ -22,7 +22,6 @@ init()
 
 # 8 bit ANSI escape color codes, solarized
 AVAILABLE_COLORS = {
-        "black": 0,
         "red": 1,
         "green": 2,
         "yellow": 3,
@@ -34,6 +33,7 @@ AVAILABLE_COLORS = {
         "orange": 9,
         "grey": 10,
         "purple": 13,
+        "black": 0
         }
 
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -704,7 +704,10 @@ def read_data(args: Dict) -> Tuple[List, List, List, List]:
                         labels.append(cols[0].strip())
                         data_points = []
                         for i in range(1, len(cols)):
-                            data_points.append(float(cols[i].strip()))
+                            s = cols[i].strip()
+                            if not s:
+                                s = "0"
+                            data_points.append(float(s))
 
                         data.append(data_points)
     except FileNotFoundError:
