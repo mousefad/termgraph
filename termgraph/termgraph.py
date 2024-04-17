@@ -499,7 +499,7 @@ def print_vertical(vertical_rows: List, labels: List, color: bool, args: Dict) -
 def chart(colors: List, data: List, args: Dict, labels: List) -> None:
     """Handle the normalization of data and the printing of the graph."""
     len_categories = len(data[0])
-    if len_categories > 1:
+    if len_categories >= 1:
         # Stacked graph
         if args["stacked"]:
             normal_dat = normalize(data, args["width"])
@@ -625,7 +625,7 @@ def check_data(labels: List, data: List, args: Dict) -> List:
                 colors.append(AVAILABLE_COLORS.get(color))
 
     # Vertical graph for multiple series of same scale is not supported yet.
-    if args["vertical"] and len_categories > 1 and not args["different_scale"]:
+    if args["vertical"] and len_categories >= 1 and not args["different_scale"]:
         print(
             ">> Error: Vertical graph for multiple series of same "
             "scale is not supported yet."
@@ -696,8 +696,7 @@ def read_data(args: Dict) -> Tuple[List, List, List, List]:
 
                     # Line contains categories.
                     if line.startswith("@"):
-                        cols[0] = cols[0].replace("@ ", "")
-                        categories = cols
+                        categories = cols[1:]
 
                     # Line contains label and values.
                     else:
