@@ -29,11 +29,21 @@ AVAILABLE_COLORS = {
         "magenta": 5,
         "cyan": 6,
         "white": 7,
-        "transparant": 8,
         "orange": 9,
         "grey": 10,
+        "lightgrey": 11,
+        "lightergrey": 12,
         "purple": 13,
-        "black": 0
+        "brownishgrey": 14,
+        "brightwhite": 15,
+        "24": 24,
+        "25": 25,
+        "26": 26,
+        "27": 27,
+        "28": 28,
+        "29": 29,
+        "30": 30,
+        "31": 31
         }
 
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -269,7 +279,7 @@ def hist_rows(data: List, args: Dict, colors: List):
             color = None
 
         if not args.get("no_labels"):
-            print("{:{x}} – {:{x}}: ".format(border[0], border[1], x=max_len), end="")
+            print("{:{x}} – {:{x}} ".format(border[0], border[1], x=max_len), end="")
 
         num_blocks = normal_counts[i]
 
@@ -304,7 +314,7 @@ def horiz_rows(
             if args.get("label_before"):
                 fmt = "{:<{x}}"
             else:
-                fmt = "{:<{x}}: "
+                fmt = "{:<{x}} "
             label = fmt.format(labels[i], x=find_max_label_length(labels))
 
         values = data[i]
@@ -357,7 +367,7 @@ def print_row(
     value,
     num_blocks: int,
     val_min: int,
-    color: bool,
+    color: int,
     label: bool = False,
     tail: bool = False,
     doprint: bool = False,
@@ -369,8 +379,6 @@ def print_row(
     3: ▇▇▇▇ 4
     """
     sys.stdout.write("\033[0m")  # no color
-    # if value == 0.0:
-    #     sys.stdout.write("\033[90m")  # dark gray
 
     if doprint:
         print(label, tail, " ", end="")
@@ -411,7 +419,7 @@ def stacked_graph(
             # Hide the labels.
             label = ""
         else:
-            label = "{:<{x}}: ".format(labels[i], x=find_max_label_length(labels))
+            label = "{:<{x}} ".format(labels[i], x=find_max_label_length(labels))
 
         if args.get("space_between") and i != 0:
             print()
@@ -645,16 +653,13 @@ def print_categories(categories: List, colors: List) -> None:
     the graph."""
     for i in range(len(categories)):
         if colors:
-            sys.stdout.write(
-                    "\033[38:5:{color_i}m".format(color_i=colors[i])
-            )  # Start to write colorized.
             sys.stdout.write(f"\033[38:5:{colors[i]}m")  # Start to write colorized.
 
         sys.stdout.write(TICK + " " + categories[i] + "  ")
         if colors:
             sys.stdout.write("\033[0m")  # Back to original.
 
-    print("\n\n")
+    print("\n")
 
 
 def read_data(args: Dict) -> Tuple[List, List, List, List]:
@@ -778,7 +783,7 @@ def calendar_heatmap(data: Dict, labels: List, args: Dict) -> None:
     sys.stdout.write("\n")
 
     for day in range(7):
-        sys.stdout.write(DAYS[day] + ": ")
+        sys.stdout.write(DAYS[day] + " ")
         for week in range(53):
             day_ = start_dt + timedelta(days=day + week * 7)
             day_str = day_.strftime("%Y-%m-%d")
