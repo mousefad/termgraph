@@ -92,7 +92,7 @@ def init_args() -> Dict:
     parser.add_argument("--histogram", action="store_true", help="Histogram")
     parser.add_argument("--bins", default=5, type=int, help="Bins of Histogram")
     parser.add_argument(
-        "--different-scale",
+        "--differentscale",
         action="store_true",
         help="Categories have different scales.",
     )
@@ -374,14 +374,17 @@ def print_row(
 ):
     """A method to print a row for a horizontal graphs.
     i.e:
-    1: ▇▇ 2
-    2: ▇▇▇ 3
-    3: ▇▇▇▇ 4
+    1 ▇▇ 2
+    2 ▇▇▇ 3
+    3 ▇▇▇▇ 4
     """
     sys.stdout.write("\033[0m")  # no color
 
     if doprint:
         print(label, tail, " ", end="")
+
+    if color:
+        sys.stdout.write(f"\033[38:5:{color}m")  # Start to write colorized.
 
     if (num_blocks < 1 and (value > val_min or value > 0)) or (
         doprint and value == 0.0
@@ -390,8 +393,6 @@ def print_row(
         # and the normal value is less than one.
         sys.stdout.write(SM_TICK)
     else:
-        if color:
-            sys.stdout.write(f"\033[38:5:{color}m")  # Start to write colorized.
         for _ in range(num_blocks):
             sys.stdout.write(TICK)
 
@@ -519,7 +520,7 @@ def chart(colors: List, data: List, args: Dict, labels: List) -> None:
 
         # Multiple series graph with different scales
         # Normalization per category
-        if args["different_scale"]:
+        if args["differentscale"]:
             for i in range(len_categories):
                 cat_data = []
                 for dat in data:
@@ -538,7 +539,6 @@ def chart(colors: List, data: List, args: Dict, labels: List) -> None:
                         vertic = vertically(row[0], row[1], row[2], row[3], args=args)
                     else:
                         print_row(*row)
-                        print("\n")
 
                 # The above gathers data for vertical and does not print
                 # the final print happens at once here
@@ -633,7 +633,7 @@ def check_data(labels: List, data: List, args: Dict) -> List:
                 colors.append(AVAILABLE_COLORS.get(color))
 
     # Vertical graph for multiple series of same scale is not supported yet.
-    if args["vertical"] and len_categories > 0 and not args["different_scale"]:
+    if args["vertical"] and len_categories > 0 and not args["differentscale"]:
         print(
             ">> Error: Vertical graph for multiple series of same "
             "scale is not supported yet."
