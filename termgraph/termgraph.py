@@ -182,19 +182,24 @@ def normalize(data: List, width: int) -> List:
             data_offset.append([d + min_datum for d in datum])
     else:
         data_offset = data
+
     min_datum = find_min(data_offset)
     max_datum = find_max(data_offset)
 
-    # max_dat / width is the value for a single tick. norm_factor is the
-    # inverse of this value
-    # If you divide a number to the value of single tick, you will find how
-    # many ticks it does contain basically.
-    norm_factor = width / float(max_datum)
-    normal_data = []
-    for datum in data_offset:
-        normal_data.append([v * norm_factor for v in datum])
+    if max_datum == 0:
+        return data_offset
 
-    return normal_data
+    else:
+        # max_dat / width is the value for a single tick. norm_factor is the
+        # inverse of this value
+        # If you divide a number to the value of single tick, you will find how
+        # many ticks it does contain basically.
+        norm_factor = width / float(max_datum)
+        normal_data = []
+        for datum in data_offset:
+            normal_data.append([v * norm_factor for v in datum])
+
+        return normal_data
 
 
 def find_max_label_length(labels: List) -> int:
