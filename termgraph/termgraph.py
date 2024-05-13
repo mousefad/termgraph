@@ -184,7 +184,6 @@ def normalize(data: List, width: int) -> List:
         data_offset = data
 
     max_datum = find_max(data_offset)
-    print(data_offset)
 
     if max_datum == 0:
         return data_offset
