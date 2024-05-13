@@ -167,7 +167,7 @@ def find_min(data: List):
 
 def find_max(data: List):
     """Return the maximum value in sublist of list."""
-    return max([max(sublist) for sublist in data])
+    return max([sum(sublist) for sublist in data])
 
 
 def normalize(data: List, width: int) -> List:
@@ -183,8 +183,8 @@ def normalize(data: List, width: int) -> List:
     else:
         data_offset = data
 
-    min_datum = find_min(data_offset)
     max_datum = find_max(data_offset)
+    print(data_offset)
 
     if max_datum == 0:
         return data_offset
