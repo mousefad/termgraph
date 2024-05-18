@@ -697,18 +697,18 @@ def read_data(args: Dict) -> Tuple[List, List, List, List]:
                 if not line.startswith("#"):
                     if line.find(DELIM) > 0:
                         # https://stackoverflow.com/questions/2785755/how-to-split-but-ignore-separators-in-quoted-strings-in-python
-                        # hardcoding DELIM, unfortunately, until I find out how to splice it in the pattern below
-                        cols = re.split(''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', line)
+                        # remove delimiters, but only when not within quotes, and part of the column header
+                        cols = re.split(DELIM+'''(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', line)
                     else:
                         cols = line.split()
 
                     # Line contains categories.
                     if line.startswith("@"):
-                        categories = cols[1:]
+                        categories = [ e.strip(" \"") for e in cols[1:]]
 
                     # Line contains label and values.
                     else:
-                        labels.append(cols[0].strip())
+                        labels.append(cols[0].strip(" \""))
                         data_points = []
                         for i in range(1, len(cols)):
                             s = cols[i].strip()
