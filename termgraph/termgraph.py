@@ -643,7 +643,7 @@ def check_data(labels: List, data: List, args: Dict) -> List:
 
     # If user hasn't inserted colors, pick the first n colors
     # from the dict (n = number of categories).
-    if args["stacked"] and not colors:
+    if not colors:
         colors = [v for v in list(AVAILABLE_COLORS.values())[:len_categories]]
 
     return colors
