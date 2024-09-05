@@ -20,7 +20,7 @@ VERSION = "0.5.4"
 
 init()
 
-# 8 bit ANSI escape color codes, solarized
+# 8 bit ANSI escape color codes, selenized
 AVAILABLE_COLORS = {
         "green": 2,
         "red": 1,
@@ -28,13 +28,15 @@ AVAILABLE_COLORS = {
         "blue": 4,
         "magenta": 5,
         "cyan": 6,
-        "white": 7,
-        "orange": 9,
-        "grey": 10,
-        "lightgrey": 11,
-        "lightergrey": 12,
-        "purple": 13,
-        "brownishgrey": 14,
+        "grey": 7,
+        "black": 0,
+        "brightblack": 8,
+        "brightred": 9,
+        "brightgreen": 10,
+        "brightyellow": 11,
+        "brightblue": 12,
+        "brightmagenta": 13,
+        "brightcyan": 14,
         "brightwhite": 15,
         "24": 24,
         "25": 25,
