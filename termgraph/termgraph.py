@@ -59,8 +59,10 @@ AVAILABLE_COLORS = {
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 UNITS = ["", "K", "M", "B", "T"]
 DELIM = ","
-TICK = "▇"
-SM_TICK = "▏"
+# TICK = "▇"
+TICK = '⣿'
+# SM_TICK = "▏"
+SM_TICK = "⡇"
 
 try:
     range = xrange  # type: ignore
