@@ -60,6 +60,7 @@ DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 UNITS = ["", "K", "M", "B", "T"]
 DELIM = ","
 # TICK = "▇"
+# this one is nice '🟥' (from Unicode Geometric Shapes Block), but double charwidth, so needs correction in calculation
 TICK = '⣿'
 # SM_TICK = "▏"
 SM_TICK = "⡇"
