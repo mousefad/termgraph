@@ -22,46 +22,46 @@ init()
 
 # 8 bit ANSI escape color codes, selenized
 AVAILABLE_COLORS = {
-        "green": 2,
-        "red": 1,
-        "yellow": 3,
-        "blue": 4,
-        "magenta": 5,
-        "cyan": 6,
-        "grey": 7,
-        "black": 0,
-        "brightblack": 8,
-        "brightred": 9,
-        "brightgreen": 10,
-        "brightyellow": 11,
-        "brightblue": 12,
-        "brightmagenta": 13,
-        "brightcyan": 14,
-        "brightwhite": 15,
-        "24": 24,
-        "25": 25,
-        "26": 26,
-        "27": 27,
-        "28": 28,
-        "29": 29,
-        "30": 30,
-        "31": 31,
-        "32": 32,
-        "33": 33,
-        "34": 34,
-        "35": 35,
-        "36": 36,
-        "37": 37,
-        "38": 38,
-        "39": 39
-        }
+    "green": 2,
+    "red": 1,
+    "yellow": 3,
+    "blue": 4,
+    "magenta": 5,
+    "cyan": 6,
+    "grey": 7,
+    "black": 0,
+    "brightblack": 8,
+    "brightred": 9,
+    "brightgreen": 10,
+    "brightyellow": 11,
+    "brightblue": 12,
+    "brightmagenta": 13,
+    "brightcyan": 14,
+    "brightwhite": 15,
+    "24": 24,
+    "25": 25,
+    "26": 26,
+    "27": 27,
+    "28": 28,
+    "29": 29,
+    "30": 30,
+    "31": 31,
+    "32": 32,
+    "33": 33,
+    "34": 34,
+    "35": 35,
+    "36": 36,
+    "37": 37,
+    "38": 38,
+    "39": 39,
+}
 
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 UNITS = ["", "K", "M", "B", "T"]
 DELIM = ","
 # TICK = "▇"
 # this one is nice '🟥' (from Unicode Geometric Shapes Block), but double charwidth, so needs correction in calculation
-TICK = '⣿'
+TICK = "⣿"
 # SM_TICK = "▏"
 SM_TICK = "⡇"
 
@@ -74,19 +74,29 @@ except NameError:
 def init_args() -> Dict:
     """Parse and return the arguments."""
     parser = argparse.ArgumentParser(description="draw basic graphs on terminal")
+    parser.add_argument("--bins", default=5, type=int, help="Bins of Histogram")
     parser.add_argument(
-        "filename",
-        nargs="?",
-        default="-",
-        help="data file name (comma or space separated). Defaults to stdin.",
+        "--calendar", action="store_true", help="Calendar Heatmap chart"
     )
-    parser.add_argument("--title", help="Title of graph")
+    parser.add_argument("--color", nargs="*", help="Graph bar color( s )")
     parser.add_argument(
-        "--width", type=int, default=50, help="width of graph in characters default:50"
+        "--custom-tick", default="", help="Custom tick mark, emoji approved"
+    )
+    parser.add_argument(
+        "--delim", default="", help="Custom delimiter, default , or space"
+    )
+    parser.add_argument(
+        "--differentscale",
+        action="store_true",
+        help="Categories have different scales.",
     )
     parser.add_argument("--format", default="{:<5.2f}", help="format specifier to use.")
+    parser.add_argument("--histogram", action="store_true", help="Histogram")
     parser.add_argument(
-        "--suffix", default="", help="string to add as a suffix to all data points."
+        "--label-before",
+        action="store_true",
+        default=False,
+        help="Display the values before the bars",
     )
     parser.add_argument(
         "--no-labels", action="store_true", help="Do not print the label column"
@@ -99,38 +109,29 @@ def init_args() -> Dict:
         action="store_true",
         help="Print a new line after every field",
     )
-    parser.add_argument("--color", nargs="*", help="Graph bar color( s )")
-    parser.add_argument("--vertical", action="store_true", help="Vertical graph")
     parser.add_argument("--stacked", action="store_true", help="Stacked bar graph")
-    parser.add_argument("--histogram", action="store_true", help="Histogram")
-    parser.add_argument("--bins", default=5, type=int, help="Bins of Histogram")
-    parser.add_argument(
-        "--differentscale",
-        action="store_true",
-        help="Categories have different scales.",
-    )
-    parser.add_argument(
-        "--calendar", action="store_true", help="Calendar Heatmap chart"
-    )
     parser.add_argument("--start-dt", help="Start date for Calendar chart")
     parser.add_argument(
-        "--custom-tick", default="", help="Custom tick mark, emoji approved"
+        "--suffix", default="", help="string to add as a suffix to all data points."
     )
-    parser.add_argument(
-        "--delim", default="", help="Custom delimiter, default , or space"
-    )
+    parser.add_argument("--title", help="Title of graph")
     parser.add_argument(
         "--verbose", action="store_true", help="Verbose output, helpful for debugging"
     )
     parser.add_argument(
-        "--label-before",
-        action="store_true",
-        default=False,
-        help="Display the values before the bars",
-    )
-    parser.add_argument(
         "--version", action="store_true", help="Display version and exit"
     )
+    parser.add_argument("--vertical", action="store_true", help="Vertical graph")
+    parser.add_argument(
+        "--width", type=int, default=50, help="width of graph in characters default:50"
+    )
+    parser.add_argument(
+        "filename",
+        nargs="?",
+        default="-",
+        help="data file name (comma or space separated). Defaults to stdin.",
+    )
+
     if len(sys.argv) == 1:
         if sys.stdin.isatty():
             parser.print_usage()
@@ -236,7 +237,7 @@ def cvt_to_readable(num):
         index = math.floor(math.log(num) / math.log(1000))
 
         # Converts the number to the human readable format and returns it.
-        newNum = round(num / (1000 ** index), 3)
+        newNum = round(num / (1000**index), 3)
         newNum *= -1 if neg else 1
         degree = UNITS[index]
 
@@ -499,7 +500,7 @@ def print_vertical(vertical_rows: List, labels: List, color: bool, args: Dict) -
     """Print the whole vertical graph."""
     if color:
         sys.stdout.write(
-                "\033[38:5:{color}m".format(color=color)
+            "\033[38:5:{color}m".format(color=color)
         )  # Start to write colorized.
 
     for row in vertical_rows:
@@ -599,7 +600,7 @@ def chart(colors: List, data: List, args: Dict, labels: List) -> None:
 def check_data(labels: List, data: List, args: Dict) -> List:
     """Check that all data were inserted correctly. Return the colors."""
     if len(data) == 0:
-        sys.exit(0);
+        sys.exit(0)
 
     len_categories = len(data[0])
 
@@ -711,17 +712,19 @@ def read_data(args: Dict) -> Tuple[List, List, List, List]:
                     if line.find(DELIM) > 0:
                         # https://stackoverflow.com/questions/2785755/how-to-split-but-ignore-separators-in-quoted-strings-in-python
                         # remove delimiters, but only when not within quotes, and part of the column header
-                        cols = re.split(DELIM+'''(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', line)
+                        cols = re.split(
+                            DELIM + """(?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", line
+                        )
                     else:
                         cols = line.split()
 
                     # Line contains categories.
                     if line.startswith("@"):
-                        categories = [ e.strip(" \"") for e in cols[1:]]
+                        categories = [e.strip(' "') for e in cols[1:]]
 
                     # Line contains label and values.
                     else:
-                        labels.append(cols[0].strip(" \""))
+                        labels.append(cols[0].strip(' "'))
                         data_points = []
                         for i in range(1, len(cols)):
                             s = cols[i].strip()
