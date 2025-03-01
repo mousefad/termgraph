@@ -11,3 +11,4 @@ termgraph.egg-info/
 htmlcov/
 .python-version
 .vimrc
+project.env
